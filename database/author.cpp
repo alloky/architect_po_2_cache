@@ -131,7 +131,7 @@ namespace database
             else
                 throw std::logic_error("key not found in the cache");
         }
-        catch (std::exception err)
+        catch (std::exception& err)
         {
             //std::cout << "error:" << err.what() << std::endl;
             throw;

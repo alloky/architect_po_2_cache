@@ -21,6 +21,7 @@ include_directories(${Poco_INCLUDE_DIRS})
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories("/usr/include/mysql")
 include_directories("/usr/local/include/mysql")
+include_directories("/usr/local/include/Poco"   )
 include_directories(${Boost_INCLUDE_DIR})
 link_directories("/usr/local/lib")
 
@@ -43,7 +44,6 @@ target_link_libraries(${EXAMPLE_BINARY} PRIVATE
                              "PocoDataMySQL"
                              "mysqlclient"
                              "ignite-binary"
-                             "ignite"
                              "ignite-common"
                              ${IGNITE_JNI_LIB}
                              "ignite-thin-client"

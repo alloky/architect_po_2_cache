@@ -1,8 +1,6 @@
 #include "cache_thick.h"
 #include "../config/config.h"
 
-
-
 #include <exception>
 
 
