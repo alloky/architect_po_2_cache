@@ -39,7 +39,7 @@ using Poco::Util::ServerApplication;
 
 #include "http_request_factory.h"
 #include "../config/config.h"
-#include "../database/author.h"
+#include "../database/person.h"
 
 
 class HTTPWebServer : public Poco::Util::ServerApplication
@@ -120,7 +120,7 @@ protected:
                       [[maybe_unused]] const std::string &value)
     {
         std::cout << "init db" << std::endl;
-        database::Author::init();
+        database::Person::init();
     }
     void handleLogin([[maybe_unused]] const std::string &name,
                      [[maybe_unused]] const std::string &value)
@@ -186,7 +186,7 @@ protected:
                 config().getString("HTTPWebServer.format",
                                    DateTimeFormat::SORTABLE_FORMAT));
             
-            //database::Author::warm_up_cache();
+            //database::Person::warm_up_cache();
 
             ServerSocket svs(Poco::Net::SocketAddress("0.0.0.0", port));
             HTTPServer srv(new HTTPRequestFactory(format),

@@ -7,7 +7,7 @@
 
 namespace database
 {
-    CacheThick::CacheThick(ignite::Ignite &client) : _client(client),_cache(_client.GetCache<long, std::string>("authors"))
+    CacheThick::CacheThick(ignite::Ignite &client) : _client(client),_cache(_client.GetCache<long, std::string>("persons"))
     {
 
     }

@@ -1,4 +1,4 @@
-#include "author.h"
+#include "person.h"
 #include "database.h"
 #include "cache.h"
 #include "../config/config.h"
@@ -19,7 +19,7 @@ using Poco::Data::Statement;
 namespace database
 {
 
-    void Author::init()
+    void Person::init()
     {
         try
         {
@@ -27,12 +27,12 @@ namespace database
             Poco::Data::Session session = database::Database::get().create_session();
             //*
             Statement drop_stmt(session);
-            drop_stmt << "DROP TABLE IF EXISTS Author", now;
+            drop_stmt << "DROP TABLE IF EXISTS Person", now;
             //*/
 
             // (re)create table
             Statement create_stmt(session);
-            create_stmt << "CREATE TABLE IF NOT EXISTS `Author` (`id` INT NOT NULL AUTO_INCREMENT,"
+            create_stmt << "CREATE TABLE IF NOT EXISTS `Person` (`id` INT NOT NULL AUTO_INCREMENT,"
                         << "`first_name` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,"
                         << "`last_name` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,"
                         << "`email` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,"
@@ -54,7 +54,7 @@ namespace database
         }
     }
 
-    Poco::JSON::Object::Ptr Author::toJSON() const
+    Poco::JSON::Object::Ptr Person::toJSON() const
     {
         Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
 
@@ -67,30 +67,30 @@ namespace database
         return root;
     }
 
-    Author Author::fromJSON(const std::string &str)
+    Person Person::fromJSON(const std::string &str)
     {
-        Author author;
+        Person Person;
         Poco::JSON::Parser parser;
         Poco::Dynamic::Var result = parser.parse(str);
         Poco::JSON::Object::Ptr object = result.extract<Poco::JSON::Object::Ptr>();
 
-        author.id() = object->getValue<long>("id");
-        author.first_name() = object->getValue<std::string>("first_name");
-        author.last_name() = object->getValue<std::string>("last_name");
-        author.email() = object->getValue<std::string>("email");
-        author.title() = object->getValue<std::string>("title");
+        Person.id() = object->getValue<long>("id");
+        Person.first_name() = object->getValue<std::string>("first_name");
+        Person.last_name() = object->getValue<std::string>("last_name");
+        Person.email() = object->getValue<std::string>("email");
+        Person.title() = object->getValue<std::string>("title");
 
-        return author;
+        return Person;
     }
 
-    Author Author::read_by_id(long id)
+    Person Person::read_by_id(long id)
     {
         try
         {
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement select(session);
-            Author a;
-            select << "SELECT id, first_name, last_name, email, title FROM Author where id=?",
+            Person a;
+            select << "SELECT id, first_name, last_name, email, title FROM Person where id=?",
                 into(a._id),
                 into(a._first_name),
                 into(a._last_name),
@@ -120,7 +120,7 @@ namespace database
         }
     }
 
-    Author Author::read_from_cache_by_id(long id)
+    Person Person::read_from_cache_by_id(long id)
     {
 
         try
@@ -137,9 +137,9 @@ namespace database
             throw;
         }
     }
-    void Author::warm_up_cache()
+    void Person::warm_up_cache()
     {
-        std::cout << "wharming up authors cache ...";
+        std::cout << "wharming up Persons cache ...";
         auto array = read_all();
         long count = 0;
         for (auto &a : array)
@@ -151,11 +151,11 @@ namespace database
     }
 
 
-    size_t Author::size_of_cache(){
+    size_t Person::size_of_cache(){
         return database::Cache::get().size();
     }
 
-    void Author::save_to_cache()
+    void Person::save_to_cache()
     {
         std::stringstream ss;
         Poco::JSON::Stringifier::stringify(toJSON(), ss);
@@ -163,15 +163,15 @@ namespace database
         database::Cache::get().put(_id, message);
     }
 
-    std::vector<Author> Author::read_all()
+    std::vector<Person> Person::read_all()
     {
         try
         {
             Poco::Data::Session session = database::Database::get().create_session();
             Statement select(session);
-            std::vector<Author> result;
-            Author a;
-            select << "SELECT id, first_name, last_name, email, title FROM Author",
+            std::vector<Person> result;
+            Person a;
+            select << "SELECT id, first_name, last_name, email, title FROM Person",
                 into(a._id),
                 into(a._first_name),
                 into(a._last_name),
@@ -200,17 +200,17 @@ namespace database
         }
     }
 
-    std::vector<Author> Author::search(std::string first_name, std::string last_name)
+    std::vector<Person> Person::search(std::string first_name, std::string last_name)
     {
         try
         {
             Poco::Data::Session session = database::Database::get().create_session();
             Statement select(session);
-            std::vector<Author> result;
-            Author a;
+            std::vector<Person> result;
+            Person a;
             first_name+="%";
             last_name+="%";
-            select << "SELECT id, first_name, last_name, email, title FROM Author where first_name LIKE ? and last_name LIKE ?",
+            select << "SELECT id, first_name, last_name, email, title FROM Person where first_name LIKE ? and last_name LIKE ?",
                 into(a._id),
                 into(a._first_name),
                 into(a._last_name),
@@ -242,7 +242,7 @@ namespace database
     }
 
    
-    void Author::save_to_mysql()
+    void Person::save_to_mysql()
     {
 
         try
@@ -250,7 +250,7 @@ namespace database
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
 
-            insert << "INSERT INTO Author (first_name,last_name,email,title) VALUES(?, ?, ?, ?)",
+            insert << "INSERT INTO Person (first_name,last_name,email,title) VALUES(?, ?, ?, ?)",
                 use(_first_name),
                 use(_last_name),
                 use(_email),
@@ -283,52 +283,52 @@ namespace database
         }
     }
 
-    long Author::get_id() const
+    long Person::get_id() const
     {
         return _id;
     }
 
-    const std::string &Author::get_first_name() const
+    const std::string &Person::get_first_name() const
     {
         return _first_name;
     }
 
-    const std::string &Author::get_last_name() const
+    const std::string &Person::get_last_name() const
     {
         return _last_name;
     }
 
-    const std::string &Author::get_email() const
+    const std::string &Person::get_email() const
     {
         return _email;
     }
 
-    const std::string &Author::get_title() const
+    const std::string &Person::get_title() const
     {
         return _title;
     }
 
-    long &Author::id()
+    long &Person::id()
     {
         return _id;
     }
 
-    std::string &Author::first_name()
+    std::string &Person::first_name()
     {
         return _first_name;
     }
 
-    std::string &Author::last_name()
+    std::string &Person::last_name()
     {
         return _last_name;
     }
 
-    std::string &Author::email()
+    std::string &Person::email()
     {
         return _email;
     }
 
-    std::string &Author::title()
+    std::string &Person::title()
     {
         return _title;
     }

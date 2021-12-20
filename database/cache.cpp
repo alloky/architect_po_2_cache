@@ -20,7 +20,7 @@ namespace database
         try
         {
             _client = ignite::thin::IgniteClient::Start(cfg);
-            _cache = _client.GetOrCreateCache<long, std::string>("authors");
+            _cache = _client.GetOrCreateCache<long, std::string>("persons");
         }
         catch (ignite::IgniteError& err)
         {

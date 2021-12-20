@@ -30,7 +30,7 @@ add_executable(${EXAMPLE_BINARY} main.cpp
                                  database/database.cpp
                                  database/cache.cpp
                                  #database/cache_thick.cpp
-                                 database/author.cpp)
+        database/person.cpp)
 
 
 target_include_directories(${EXAMPLE_BINARY} PRIVATE "${CMAKE_BINARY_DIR}")
@@ -60,5 +60,12 @@ set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT Dmitriy.Dzyuba@mts.ru)
+set(SOURCE_FILES
+        web_server/handlers/person_handler.h
+        web_server/http_request_factory.h
+        web_server/http_web_server.h
+        database/person.cpp
+        database/person.h)
+
 include(CPack)
 
